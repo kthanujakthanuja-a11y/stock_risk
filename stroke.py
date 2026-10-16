@@ -1,5 +1,8 @@
 
 
+import matplotlib
+matplotlib.use("Agg")
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -20,7 +23,7 @@ df = pd.read_csv(url)
 
 print("\nDataset loaded successfully!")
 print("Dataset Shape:", df.shape)
-display(df.head())
+print(df.head())
 
 # 3. Dataset Information
 print("\nDataset Information:")
@@ -51,7 +54,7 @@ df_encoded = pd.get_dummies(
 )
 
 print("\nCategorical data converted successfully!")
-display(df_encoded.head())
+print(df_encoded.head())
 
 # 7. Separate Features and Target
 X = df_encoded.drop(columns=["id", "stroke"])
@@ -94,9 +97,11 @@ report = classification_report(
     zero_division=0
 )
 
+stroke_recall = report.get("1", {}).get("recall", 0)
+
 print("\n===== MODEL EVALUATION ====")
 print("Accuracy:", round(accuracy * 100, 2), "%")
-print("Stroke Recall:", round(report["1"]["recall"] * 100, 2), "%")
+print("Stroke Recall:", round(stroke_recall * 100, 2), "%")
 print("\nClassification Report:")
 print(classification_report(
     y_test, y_pred, zero_division=0
@@ -135,7 +140,7 @@ if len(stroke_patients) > 0:
     prediction = model.predict(sample)[0]
 
     print("Patient Details:")
-    display(sample)
+    print(sample)
 
     if prediction == 1:
         print("Model Prediction: Stroke Risk Detected")
@@ -151,7 +156,7 @@ print("Algorithm: Decision Tree Classifier")
 print("Training Records:", len(X_train))
 print("Testing Records:", len(X_test))
 print("Accuracy:", round(accuracy * 100, 2), "%")
-print("Stroke Recall:", round(report["1"]["recall"] * 100, 2), "%")
+print("Stroke Recall:", round(stroke_recall * 100, 2), "%")
 print("Successfully! predicted")
 
 
